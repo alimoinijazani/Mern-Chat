@@ -12,8 +12,7 @@ export default function Navigation() {
       <Container>
         <LinkContainer to="/">
           <Navbar.Brand>
-            Family Chat
-            <FaRocketchat />
+            Family Chat <FaRocketchat />
           </Navbar.Brand>
         </LinkContainer>
         <Nav className="ms-auto d-flex justify-content-center align-items-center">

@@ -2,3 +2,19 @@ a {
   text-decoration: none;
   color: black;
 }
+.profile-pic {
+  width: 3rem;
+  height: 3rem;
+  border-radius: 50%;
+  object-fit: cover;
+}
+/*home*/
+.home__container-left {
+  height: 90vh;
+}
+.home__container-right {
+  background-image: url(../public/pic/home.jpg);
+  background-size: cover;
+  background-position: center;
+  overflow-x: hidden;
+}
