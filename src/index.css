@@ -45,3 +45,9 @@ a {
   bottom: 0;
   right: 0;
 }
+/*chat*/
+.messages-output {
+  height: 80vh;
+  border: 1px solid lightgray;
+  overflow-y: scroll;
+}
