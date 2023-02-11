@@ -18,3 +18,30 @@ a {
   background-position: center;
   overflow-x: hidden;
 }
+.signup__container-left {
+  height: 90vh;
+}
+
+.signup__container-right {
+  height: 90vh;
+  background-image: url(../public/pic/signup.jpg);
+  background-size: cover;
+  background-position: center;
+  overflow-x: hidden;
+}
+.profile-pic-big {
+  object-fit: cover;
+  width: 7rem;
+  height: 7rem;
+}
+/* .icon__container {
+  cursor: pointer;
+} */
+.icon-add-pic {
+  color: green;
+}
+.form-position {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+}
