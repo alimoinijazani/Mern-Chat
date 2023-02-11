@@ -78,6 +78,7 @@ export default function Signup() {
                 accept="image/jpg"
                 hidden
                 onChange={uploadFileHandler}
+                required
               />
             </Form.Group>
           </div>
@@ -87,6 +88,7 @@ export default function Signup() {
               <Form.Control
                 onChange={(e) => setName(e.target.value)}
                 value={name}
+                required
               />
             </Form.Group>
             <Form.Group className="mb-2">
@@ -94,6 +96,7 @@ export default function Signup() {
               <Form.Control
                 onChange={(e) => setEmail(e.target.value)}
                 value={email}
+                required
               />
             </Form.Group>
             <Form.Group className="mb-2">

@@ -7,9 +7,13 @@ import Button from 'react-bootstrap/Button';
 import ListGroup from 'react-bootstrap/ListGroup';
 import InputGroup from 'react-bootstrap/InputGroup';
 import { FaRestroom } from 'react-icons/fa';
+import { Helmet } from 'react-helmet-async';
 export default function Chat() {
   return (
     <Row>
+      <Helmet>
+        <title>Chat</title>
+      </Helmet>
       <Col md={4}>
         <div className="my-3 d-flex flex-column h-50">
           <h2>
