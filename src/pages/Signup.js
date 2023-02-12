@@ -7,6 +7,7 @@ import Button from 'react-bootstrap/Button';
 import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import axios from 'axios';
+import { useSignupUserMutation } from '../services/appApi';
 const reducer = (state, action) => {
   switch (action.type) {
     case 'UPLOAD_REQUEST':
@@ -28,7 +29,7 @@ export default function Signup() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [img, setImg] = useState(null);
-
+  const [signupUser, { isLoading, error }] = useSignupUserMutation();
   const uploadFileHandler = async (e) => {
     const file = e.target.files[0];
     if (file.size >= 1048576) {
@@ -53,6 +54,11 @@ export default function Signup() {
   };
   const handleSubmit = (e) => {
     e.preventDefault();
+    signupUser({ name, email, password, picture: img }).then(({ data }) => {
+      if (data) {
+        console.log(data);
+      }
+    });
   };
 
   return (

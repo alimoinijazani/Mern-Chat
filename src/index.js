@@ -5,12 +5,23 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { HelmetProvider } from 'react-helmet-async';
+
+import { Provider } from 'react-redux';
+import { PersistGate } from 'redux-persist/integration/react';
+import persistStore from 'redux-persist/es/persistStore';
+import store from './store';
+
+const persistedStore = persistStore(store);
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <HelmetProvider>
-      <App />
-    </HelmetProvider>
+    <Provider store={store}>
+      <PersistGate loading={null} persistor={persistedStore}>
+        <HelmetProvider>
+          <App />
+        </HelmetProvider>
+      </PersistGate>
+    </Provider>
   </React.StrictMode>
 );
 
