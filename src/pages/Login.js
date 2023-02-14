@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import { Link, useNavigate } from 'react-router-dom';
@@ -7,6 +7,7 @@ import { Helmet } from 'react-helmet-async';
 import { toast } from 'react-toastify';
 import { useLoginUserMutation } from '../services/appApi';
 import { useSelector } from 'react-redux';
+import { AppContext } from './../context/appContext';
 export default function Login() {
   const user = useSelector((state) => state.user);
   const navigate = useNavigate();
@@ -18,14 +19,16 @@ export default function Login() {
       navigate('/chat');
     }
   }, [navigate, user]);
+  const { socket } = useContext(AppContext);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       loginUser({ email, password }).then(({ data }) => {
         if (data) {
           //socket work
+          socket.emit('new-user');
           navigate('/chat');
-          console.log(data);
         }
       });
     } catch (err) {

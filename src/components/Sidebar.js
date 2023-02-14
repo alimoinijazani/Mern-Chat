@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 
 import Badge from 'react-bootstrap/Badge';
 
@@ -6,8 +6,24 @@ import ListGroup from 'react-bootstrap/ListGroup';
 
 import { FaRestroom } from 'react-icons/fa';
 import { useSelector } from 'react-redux';
+import { AppContext } from './../context/appContext';
 export default function Sidbar() {
   const user = useSelector((state) => state.user);
+  const {
+    socket,
+    setMembers,
+    members,
+    setCurrentRoom,
+    setRooms,
+    privateMemberMsg,
+    rooms,
+    setPrivateMemberMsg,
+    currentRoom,
+  } = useContext(AppContext);
+
+  socket.off('new-user').on('new-user', (payload) => {
+    setMembers(payload);
+  });
   return (
     <div>
       <div className="my-3 d-flex flex-column h-50">
@@ -28,13 +44,24 @@ export default function Sidbar() {
           Members <FaRestroom />
         </h2>
         <ListGroup>
-          <ListGroup.Item className="d-flex justify-content-between align-items-center">
-            <div className="d-flex justify-content-start align-items-center gap-3">
-              <img src="/pic/1.jpg" alt="" className="profile-pic" />
-              <div>name</div>
-            </div>
-            <Badge pill>2</Badge>
-          </ListGroup.Item>
+          {members
+            .filter((m) => m._id !== user._id)
+            .map((m) => (
+              <ListGroup.Item
+                key={m._id}
+                className="d-flex justify-content-between align-items-center"
+              >
+                <div className="d-flex justify-content-start align-items-center gap-3">
+                  <img
+                    src={m.picture || '/pic/noAvatar.png'}
+                    alt=""
+                    className="profile-pic"
+                  />
+                  <div>{m.name}</div>
+                </div>
+                <Badge pill></Badge>
+              </ListGroup.Item>
+            ))}
         </ListGroup>
       </div>
     </div>
