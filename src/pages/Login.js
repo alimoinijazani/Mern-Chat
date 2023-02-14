@@ -21,7 +21,7 @@ export default function Login() {
   }, [navigate, user]);
   const { socket } = useContext(AppContext);
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
     try {
       loginUser({ email, password }).then(({ data }) => {
