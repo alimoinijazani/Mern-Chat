@@ -8,9 +8,36 @@ import Navigation from './components/Navigation';
 import Chat from './pages/Chat';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
+import { useState } from 'react';
+import { useSelector } from 'react-redux';
+import { AppContext, socket } from './context/appContext';
 function App() {
+  const [rooms, setRooms] = useState([]);
+  const [currentRoom, setCurrentRoom] = useState([]);
+  const [members, setMembers] = useState([]);
+  const [messages, setMessages] = useState([]);
+  const [privateMemberMsg, setPrivateMemberMsg] = useState({});
+  const [newMessages, setNewMessages] = useState({});
+  const user = useSelector((state) => state.user);
+
   return (
-    <div>
+    <AppContext.Provider
+      value={{
+        socket,
+        currentRoom,
+        setCurrentRoom,
+        members,
+        setMembers,
+        messages,
+        setMessages,
+        privateMemberMsg,
+        setPrivateMemberMsg,
+        rooms,
+        setRooms,
+        newMessages,
+        setNewMessages,
+      }}
+    >
       <BrowserRouter>
         <ToastContainer position="bottom center" limit={1}></ToastContainer>
         <Navigation />
@@ -23,7 +50,7 @@ function App() {
           </Routes>
         </Container>
       </BrowserRouter>
-    </div>
+    </AppContext.Provider>
   );
 }
 
