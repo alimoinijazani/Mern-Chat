@@ -5,19 +5,23 @@ import Badge from 'react-bootstrap/Badge';
 import ListGroup from 'react-bootstrap/ListGroup';
 
 import { FaRestroom } from 'react-icons/fa';
+import { useSelector } from 'react-redux';
 export default function Sidbar() {
+  const user = useSelector((state) => state.user);
   return (
     <div>
       <div className="my-3 d-flex flex-column h-50">
         <h2>
           Available Rooms <FaRestroom />
         </h2>
-        <ListGroup>
-          <ListGroup.Item className="d-flex justify-content-between">
-            <div>General</div>
-            <Badge pill>2</Badge>
-          </ListGroup.Item>
-        </ListGroup>
+        {user && (
+          <ListGroup>
+            <ListGroup.Item className="d-flex justify-content-between">
+              <div>General</div>
+              <Badge pill>2</Badge>
+            </ListGroup.Item>
+          </ListGroup>
+        )}
       </div>
       <div className="h-50 d-flex flex-column">
         <h2>
