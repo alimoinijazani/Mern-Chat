@@ -1,13 +1,14 @@
-import React, { useState, useReducer } from 'react';
+import React, { useState, useReducer, useEffect } from 'react';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import { FaPlusCircle } from 'react-icons/fa';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { useSignupUserMutation } from '../services/appApi';
 import axios from 'axios';
+import { useSignupUserMutation } from '../services/appApi';
+import { useSelector } from 'react-redux';
 const reducer = (state, action) => {
   switch (action.type) {
     case 'UPLOAD_REQUEST':
@@ -22,14 +23,21 @@ const reducer = (state, action) => {
 };
 
 export default function Signup() {
+  const user = useSelector((state) => state.user);
   const [{ loadingUpload }, dispatch] = useReducer(reducer, {
     loadingUpload: false,
   });
+  const navigate = useNavigate();
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [img, setImg] = useState(null);
-
+  const [signupUser, { isLoading, error }] = useSignupUserMutation();
+  useEffect(() => {
+    if (user) {
+      navigate('/chat');
+    }
+  }, [navigate, user]);
   const uploadFileHandler = async (e) => {
     const file = e.target.files[0];
     if (file.size >= 1048576) {
@@ -54,6 +62,11 @@ export default function Signup() {
   };
   const handleSubmit = (e) => {
     e.preventDefault();
+    signupUser({ name, email, password, picture: img }).then(({ data }) => {
+      if (data) {
+        navigate('/chat');
+      }
+    });
   };
 
   return (

@@ -6,7 +6,10 @@ import NavDropdown from 'react-bootstrap/NavDropdown';
 import { FaRocketchat } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 import { LinkContainer } from 'react-router-bootstrap';
+import { useSelector } from 'react-redux';
 export default function Navigation() {
+  const user = useSelector((state) => state.user);
+  console.log(user);
   return (
     <Navbar bg="light">
       <Container>

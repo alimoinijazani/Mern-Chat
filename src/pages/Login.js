@@ -1,17 +1,36 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
-import axios from 'axios';
+
 import { toast } from 'react-toastify';
+import { useLoginUserMutation } from '../services/appApi';
+import { useSelector } from 'react-redux';
+import { AppContext } from './../context/appContext';
 export default function Login() {
+  const user = useSelector((state) => state.user);
+  const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const handleSubmit = async (e) => {
+  const [loginUser, { isLoading, error }] = useLoginUserMutation();
+  useEffect(() => {
+    if (user) {
+      navigate('/chat');
+    }
+  }, [navigate, user]);
+  // const { socket } = useContext(AppContext);
+
+  const handleSubmit = (e) => {
     e.preventDefault();
     try {
-      const { data } = await axios.post('/api/users/signin');
+      loginUser({ email, password }).then(({ data }) => {
+        if (data) {
+          //socket work
+          // socket.emit('new-user');
+          navigate('/chat');
+        }
+      });
     } catch (err) {
       toast.error(err);
     }
@@ -39,7 +58,9 @@ export default function Login() {
               required
             />
           </Form.Group>
-          <Button variant="success">Login</Button>
+          <Button type="submit" variant="success">
+            Login
+          </Button>
         </form>
       </div>
       <div className="my-5">
