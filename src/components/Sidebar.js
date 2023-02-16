@@ -20,6 +20,17 @@ export default function Sidbar() {
     setPrivateMemberMsg,
     currentRoom,
   } = useContext(AppContext);
+  const joinRoom = (room, isPublic = true) => {
+    if (!user) {
+      return alert('please login');
+    }
+    socket.emit('join-room', room);
+    setCurrentRoom(room);
+    if (isPublic) {
+      setPrivateMemberMsg(null);
+    }
+    //dispatch for notifications
+  };
   useEffect(() => {
     if (user) {
       setCurrentRoom('general');
@@ -54,6 +65,9 @@ export default function Sidbar() {
               <ListGroup.Item
                 key={room}
                 className="d-flex justify-content-between"
+                onClick={() => joinRoom(room)}
+                role="button"
+                active={room === currentRoom}
               >
                 <div>{room}</div>
                 <Badge pill></Badge>

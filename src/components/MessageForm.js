@@ -46,6 +46,19 @@ export default function MessageForm() {
     <>
       <div className="messages-output mb-1">
         {!user && <Alert variant="danger">please Login</Alert>}
+        {user &&
+          messages.map(({ _id: date, messagesByDate }, idx) => (
+            <div key={idx}>
+              <p className="alert alert-info text-center">{date}</p>
+              {messagesByDate?.map(
+                ({ content, time, from: sender }, msgIdx) => (
+                  <div key={msgIdx} className="message">
+                    <p>{content}</p>
+                  </div>
+                )
+              )}
+            </div>
+          ))}
       </div>
       <form onSubmit={handleSubmit}>
         <InputGroup>
