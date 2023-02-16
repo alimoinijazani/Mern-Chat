@@ -38,6 +38,7 @@ export default function Signup() {
       navigate('/chat');
     }
   }, [navigate, user]);
+
   const uploadFileHandler = async (e) => {
     const file = e.target.files[0];
     if (file.size >= 1048576) {
@@ -60,6 +61,7 @@ export default function Signup() {
       }
     }
   };
+
   const handleSubmit = (e) => {
     e.preventDefault();
     signupUser({ name, email, password, picture: img }).then(({ data }) => {

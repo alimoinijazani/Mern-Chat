@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useContext } from 'react';
 import InputGroup from 'react-bootstrap/InputGroup';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
@@ -6,11 +6,42 @@ import Alert from 'react-bootstrap/Alert';
 
 import { FiSend } from 'react-icons/fi';
 import { useSelector } from 'react-redux';
+import { AppContext } from './../context/appContext';
 export default function MessageForm() {
+  const user = useSelector((state) => state.user);
+  const [message, setMessage] = useState('');
+
+  const { socket, currentRoom, setMessages, messages, privateMemberMsg } =
+    useContext(AppContext);
+  function getFormattedDate() {
+    const date = new Date();
+    const year = date.getFullYear();
+    let month = (1 + date.getMonth()).toString();
+
+    month = month.length > 1 ? month : '0' + month;
+    let day = date.getDate().toString();
+
+    day = day.length > 1 ? day : '0' + day;
+
+    return month + '/' + day + '/' + year;
+  }
+  const todayDate = getFormattedDate();
+  socket.off('room-messages').on('room-messages', (roomMessages) => {
+    setMessages(roomMessages);
+  });
+
   const handleSubmit = (e) => {
     e.preventDefault();
+    if (!message) return;
+    const today = new Date();
+    const minutes =
+      today.getMinutes() < 10 ? '0' + today.getMinutes() : today.getMinutes();
+    const time = today.getHours() + ':' + minutes;
+    //tiem=14:06
+    const roomId = currentRoom;
+    socket.emit('message-room', roomId, message, user, time, todayDate);
+    setMessage('');
   };
-  const user = useSelector((state) => state.user);
   return (
     <>
       <div className="messages-output mb-1">
@@ -18,7 +49,12 @@ export default function MessageForm() {
       </div>
       <form onSubmit={handleSubmit}>
         <InputGroup>
-          <Form.Control placeholder="type message" disabled={!user} />
+          <Form.Control
+            placeholder="type message"
+            disabled={!user}
+            value={message}
+            onChange={(e) => setMessage(e.target.value)}
+          />
           <Button type="submit" disabled={!user}>
             <FiSend />
           </Button>

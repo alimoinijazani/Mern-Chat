@@ -11,11 +11,12 @@ import Button from 'react-bootstrap/Button';
 import { useLogoutUserMutation } from '../services/appApi';
 export default function Navigation() {
   const user = useSelector((state) => state.user);
-  const [logoutUser, { isLoading, error }] = useLogoutUserMutation();
+  const [logoutUser] = useLogoutUserMutation();
+
   const handleLogout = async (e) => {
     e.preventDefault();
     await logoutUser(user);
-    window.location.href('/');
+    window.location.replace('/');
   };
   return (
     <Navbar bg="light">

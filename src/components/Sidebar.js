@@ -1,9 +1,9 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 
 import Badge from 'react-bootstrap/Badge';
 
 import ListGroup from 'react-bootstrap/ListGroup';
-
+import axios from 'axios';
 import { FaRestroom } from 'react-icons/fa';
 import { useSelector } from 'react-redux';
 import { AppContext } from './../context/appContext';
@@ -20,10 +20,28 @@ export default function Sidbar() {
     setPrivateMemberMsg,
     currentRoom,
   } = useContext(AppContext);
+  useEffect(() => {
+    if (user) {
+      setCurrentRoom('general');
+      const getRooms = async () => {
+        try {
+          const { data } = await axios.get('/rooms');
+          setRooms(data);
+        } catch (err) {}
+      };
+      getRooms();
+      socket.emit('join-room', 'general');
+      socket.emit('new-user');
+    }
+  }, [setCurrentRoom, setRooms, socket, user]);
 
-  socket.off('new-user').on('new-user', (payload) => {
-    setMembers(payload);
-  });
+  socket.off('new-user').on(
+    'new-user',
+    (payload) => {
+      setMembers(payload);
+    },
+    []
+  );
   return (
     <div>
       <div className="my-3 d-flex flex-column h-50">
@@ -32,10 +50,15 @@ export default function Sidbar() {
         </h2>
         {user && (
           <ListGroup>
-            <ListGroup.Item className="d-flex justify-content-between">
-              <div>General</div>
-              <Badge pill>2</Badge>
-            </ListGroup.Item>
+            {rooms.map((room) => (
+              <ListGroup.Item
+                key={room}
+                className="d-flex justify-content-between"
+              >
+                <div>{room}</div>
+                <Badge pill></Badge>
+              </ListGroup.Item>
+            ))}
           </ListGroup>
         )}
       </div>
