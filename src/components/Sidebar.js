@@ -53,6 +53,18 @@ export default function Sidbar() {
     },
     []
   );
+  const orderIds = (id1, id2) => {
+    if (id1 > id2) {
+      return id1 + '-' + id2;
+    } else {
+      return id2 + '-' + id1;
+    }
+  };
+  const handlePrivateMemberMsg = (member) => {
+    setPrivateMemberMsg(member);
+    const roomId = orderIds(user._id, member._id);
+    joinRoom(roomId, false);
+  };
   return (
     <div>
       <div className="my-3 d-flex flex-column h-50">
@@ -87,6 +99,9 @@ export default function Sidbar() {
               <ListGroup.Item
                 key={m._id}
                 className="d-flex justify-content-between align-items-center"
+                role="button"
+                active={privateMemberMsg?._id === m?._id}
+                onClick={() => handlePrivateMemberMsg(m)}
               >
                 <div className="d-flex justify-content-start align-items-center gap-3">
                   <img
