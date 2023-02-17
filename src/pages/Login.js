@@ -13,7 +13,7 @@ export default function Login() {
   const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [loginUser, { isLoading, error }] = useLoginUserMutation();
+  const [loginUser] = useLoginUserMutation();
   useEffect(() => {
     if (user) {
       navigate('/chat');

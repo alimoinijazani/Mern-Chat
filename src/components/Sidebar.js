@@ -1,14 +1,15 @@
 import React, { useContext, useEffect } from 'react';
-
 import Badge from 'react-bootstrap/Badge';
-
 import ListGroup from 'react-bootstrap/ListGroup';
 import axios from 'axios';
 import { FaRestroom } from 'react-icons/fa';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { AppContext } from './../context/appContext';
+import { RxDotFilled } from 'react-icons/rx';
+import { addNotifications, resetNotifications } from '../features/userSlice';
 export default function Sidbar() {
   const user = useSelector((state) => state.user);
+  const dispatch = useDispatch();
   const {
     socket,
     setMembers,
@@ -20,17 +21,22 @@ export default function Sidbar() {
     setPrivateMemberMsg,
     currentRoom,
   } = useContext(AppContext);
+
   const joinRoom = (room, isPublic = true) => {
     if (!user) {
       return alert('please login');
     }
-    socket.emit('join-room', room);
+    socket.emit('join-room', room, currentRoom);
     setCurrentRoom(room);
     if (isPublic) {
       setPrivateMemberMsg(null);
     }
     //dispatch for notifications
+    dispatch(resetNotifications(room));
   };
+  socket.off('notifications').on('notifications', (room) => {
+    dispatch(addNotifications(room));
+  });
   useEffect(() => {
     if (user) {
       setCurrentRoom('general');
@@ -65,6 +71,7 @@ export default function Sidbar() {
     const roomId = orderIds(user._id, member._id);
     joinRoom(roomId, false);
   };
+
   return (
     <div>
       <div className="my-3 d-flex flex-column h-50">
@@ -82,7 +89,7 @@ export default function Sidbar() {
                 active={room === currentRoom}
               >
                 <div>{room}</div>
-                <Badge pill></Badge>
+                <Badge pill>{user.newMessages[room]}</Badge>
               </ListGroup.Item>
             ))}
           </ListGroup>
@@ -103,15 +110,25 @@ export default function Sidbar() {
                 active={privateMemberMsg?._id === m?._id}
                 onClick={() => handlePrivateMemberMsg(m)}
               >
-                <div className="d-flex justify-content-start align-items-center gap-3">
-                  <img
-                    src={m.picture || '/pic/noAvatar.png'}
-                    alt=""
-                    className="profile-pic"
-                  />
+                <div className=" d-flex justify-content-start align-items-center gap-2">
+                  <div className="position-relative">
+                    <img
+                      src={m.picture || '/pic/noAvatar.png'}
+                      alt=""
+                      className="profile-pic"
+                    />
+                    <RxDotFilled
+                      className={
+                        m.status === 'online' ? 'icon-online' : 'd-none'
+                      }
+                    />
+                  </div>
+
                   <div>{m.name}</div>
                 </div>
-                <Badge pill></Badge>
+                <Badge pill>
+                  {user.newMessages[orderIds(m._id, user._id)]}
+                </Badge>
               </ListGroup.Item>
             ))}
         </ListGroup>

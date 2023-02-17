@@ -11,6 +11,12 @@ a {
   border-radius: 50%;
   object-fit: cover;
 }
+@media screen and (max-width: 500px) {
+  .profile-pic {
+    width: 1.5rem;
+    height: 1.5rem;
+  }
+}
 /*home*/
 .home__container-left {
   height: 90vh;
@@ -42,6 +48,13 @@ a {
 } */
 .icon-add-pic {
   color: green;
+}
+.icon-online {
+  transform: scale(1.5);
+  color: rgb(2, 175, 2);
+  position: absolute;
+  bottom: 0;
+  right: 0;
 }
 .form-position {
   position: absolute;

@@ -19,7 +19,7 @@ export default function Navigation() {
     window.location.replace('/');
   };
   return (
-    <Navbar bg="light">
+    <Navbar bg="light px-3">
       <Container>
         <LinkContainer to="/">
           <Navbar.Brand>
