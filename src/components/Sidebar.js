@@ -40,6 +40,7 @@ export default function Sidbar() {
   useEffect(() => {
     if (user) {
       setCurrentRoom('general');
+
       const getRooms = async () => {
         try {
           const { data } = await axios.get('/rooms');
@@ -50,7 +51,7 @@ export default function Sidbar() {
       socket.emit('join-room', 'general');
       socket.emit('new-user');
     }
-  }, [setCurrentRoom, setRooms, socket, user]);
+  }, []);
 
   socket.off('new-user').on(
     'new-user',

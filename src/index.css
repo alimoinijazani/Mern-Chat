@@ -71,7 +71,11 @@ a {
   border: 1px solid lightgray;
   overflow-y: scroll;
 }
-
+.message-output-title {
+  position: fixed;
+  color: grey;
+  margin-left: 4rem;
+}
 .incoming-message {
   display: flex;
   justify-content: end;

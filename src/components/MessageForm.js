@@ -21,7 +21,7 @@ export default function MessageForm() {
     if (messageEndRef) {
       messageEndRef.current?.scrollIntoView({ behavior: 'smooth' });
     }
-  }, [messages, currentRoom]);
+  }, [message, currentRoom]);
 
   function getFormattedDate() {
     const date = new Date();
@@ -57,6 +57,11 @@ export default function MessageForm() {
     <>
       <div className="messages-output mb-1">
         {!user && <Alert variant="danger">please Login</Alert>}
+        <h3 className=" message-output-title">
+          {privateMemberMsg
+            ? `${privateMemberMsg.name}`
+            : currentRoom || 'General'}
+        </h3>
         {user &&
           messages.map(({ _id: date, messagesByDate }, idx) => (
             <div key={idx}>

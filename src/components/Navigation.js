@@ -32,6 +32,7 @@ export default function Navigation() {
               Chat
             </Link>
           </Nav.Item>
+
           {!user && (
             <Nav.Item>
               <Link to="/login" className="nav-link">
