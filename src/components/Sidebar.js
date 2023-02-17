@@ -73,8 +73,8 @@ export default function Sidbar() {
   };
 
   return (
-    <div>
-      <div className="my-3 d-flex flex-column h-50">
+    <div className="side-container">
+      <div className="my-3 d-flex flex-column">
         <h2>
           Available Rooms <FaRestroom />
         </h2>

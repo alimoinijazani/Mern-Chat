@@ -52,8 +52,8 @@ export default function Navigation() {
                 </>
               }
             >
-              <NavDropdown.Item>ppppppppppp</NavDropdown.Item>
-              <NavDropdown.Item>ppppppppppp</NavDropdown.Item>
+              <NavDropdown.Item>Profile</NavDropdown.Item>
+              <NavDropdown.Item></NavDropdown.Item>
               <NavDropdown.Divider />
               <NavDropdown.Item>
                 <Button variant="danger" onClick={handleLogout}>

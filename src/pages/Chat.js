@@ -7,7 +7,7 @@ import Sidebar from '../components/Sidebar';
 import MessageForm from '../components/MessageForm';
 export default function Chat() {
   return (
-    <Row className="p-4">
+    <Row className="p-1">
       <Helmet>
         <title>Chat</title>
       </Helmet>

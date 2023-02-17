@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useRef, useEffect } from 'react';
 import InputGroup from 'react-bootstrap/InputGroup';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
@@ -7,12 +7,22 @@ import Alert from 'react-bootstrap/Alert';
 import { FiSend } from 'react-icons/fi';
 import { useSelector } from 'react-redux';
 import { AppContext } from './../context/appContext';
+
 export default function MessageForm() {
   const user = useSelector((state) => state.user);
   const [message, setMessage] = useState('');
 
+  const messageEndRef = useRef(null);
+
   const { socket, currentRoom, setMessages, messages, privateMemberMsg } =
     useContext(AppContext);
+
+  useEffect(() => {
+    if (messageEndRef) {
+      messageEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    }
+  }, [messages, currentRoom]);
+
   function getFormattedDate() {
     const date = new Date();
     const year = date.getFullYear();
@@ -25,6 +35,7 @@ export default function MessageForm() {
 
     return month + '/' + day + '/' + year;
   }
+
   const todayDate = getFormattedDate();
   socket.off('room-messages').on('room-messages', (roomMessages) => {
     setMessages(roomMessages);
@@ -52,13 +63,34 @@ export default function MessageForm() {
               <p className="alert alert-info text-center">{date}</p>
               {messagesByDate?.map(
                 ({ content, time, from: sender }, msgIdx) => (
-                  <div key={msgIdx} className="message">
-                    <p>{content}</p>
+                  <div
+                    key={msgIdx}
+                    className={
+                      sender.email === user.email
+                        ? 'message'
+                        : 'incoming-message'
+                    }
+                  >
+                    <div className="d-flex align-items-center p-1 m-1 gap-2 ">
+                      <img
+                        className="profile-pic"
+                        alt=""
+                        src={sender.picture}
+                      />
+                      <p className="p-3 pb-0 d-flex flex-column">
+                        {content}
+
+                        <span className="mb-1 " style={{ color: 'grey' }}>
+                          {time}
+                        </span>
+                      </p>
+                    </div>
                   </div>
                 )
               )}
             </div>
           ))}
+        <div ref={messageEndRef} />
       </div>
       <form onSubmit={handleSubmit}>
         <InputGroup>
@@ -68,6 +100,7 @@ export default function MessageForm() {
             value={message}
             onChange={(e) => setMessage(e.target.value)}
           />
+
           <Button type="submit" disabled={!user}>
             <FiSend />
           </Button>
