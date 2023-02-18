@@ -35,7 +35,7 @@ export default function Sidbar() {
     dispatch(resetNotifications(room));
   };
   socket.off('notifications').on('notifications', (room) => {
-    dispatch(addNotifications(room));
+    if (currentRoom !== room) dispatch(addNotifications(room));
   });
   useEffect(() => {
     if (user) {
